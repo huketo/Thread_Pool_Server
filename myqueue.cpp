@@ -21,8 +21,8 @@ void enqueue(int *client_socket)
     tail = newnode;
 }
 
-//returns NULL if the queue is empty.
-//Returns the pointer to client_socket, if there is one to get
+// 큐가 비어 있으면 NULL을 반환
+// 가져올 포인터가 있으면 client_socket으로 반환
 int *dequeue()
 {
     if (head == NULL)

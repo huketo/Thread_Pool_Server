@@ -17,21 +17,21 @@
 
 using namespace std;
 
-string str;
-int K;
-int T;
-int port;
-char *ip;
+string str; // ID 값들을 저장해 둘 변수
+int K;      // 통신 횟수
+int T;      // 생성할 쓰레드 클라이언트 수
+int port;   // 포트 번호를 저장할 변수
+char *ip;   // ip주소를 저장할 변수
 
-#define BUFSIZE 1024
+#define BUFSIZE 1024 // 통신에 사용할 버퍼 사이즈
 
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
-typedef map<string, int> StrIntMap;
+typedef map<string, int> StrIntMap; // words count시 사용할 구조체
 
-void add_String(char *);
-void *thread_function(void *arg);
-void countWords(istream &in, StrIntMap &words);
+void add_String(char *);                        // ID값을 저장하는 함수
+void *thread_function(void *arg);               // 쓰레드가 사용할 함수
+void countWords(istream &in, StrIntMap &words); // id.txt 에서 ID값의 횟수를 카운팅하는 함수
 
 int main(int argc, char *argv[])
 {
@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
     char check;
     ifstream f1;
 
-    if (argc != 3)
+    if (argc != 3) // 실행시 IP주소와 포트번호를 함께 입력
     {
         printf("Usage : %s <ip> <port>\n", argv[0]);
         exit(1);
@@ -68,6 +68,7 @@ int main(int argc, char *argv[])
         pthread_create(&thread_pool[i], NULL, &thread_function, (void *)(long)i);
     }
 
+    // 쓰레드가 모두 종료될 때 까지 기다림.
     for (int i = T - 1; i >= 0; i--)
     {
         done[i] = 1;
@@ -81,7 +82,7 @@ int main(int argc, char *argv[])
     sleep(10);
 
     printf("**********************************************************\n");
-    cout << "Check if all numbers (of K times) have been retrieved(Y/n)" << endl;
+    cout << "Check if all numbers (of K times) have been retrieved(Y/n) ";
     cin >> check;
 
     while (1)
@@ -98,7 +99,7 @@ int main(int argc, char *argv[])
 
         else
         {
-            cout << "Check if all numbers (of K times) have been retrieved(Y/n)" << endl;
+            cout << "Check if all numbers (of K times) have been retrieved(Y/n) ";
             cin >> check;
         }
     }
@@ -148,7 +149,6 @@ void countWords(istream &in, StrIntMap &words)
     }
 }
 
-// 쓰레드 모듈.
 void *thread_function(void *arg)
 {
     int i = 0;
